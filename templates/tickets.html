@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="icon" href="../static/assets/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            background-image: url('../static/assets/itcrowd.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .comments-column {
+            max-width: 400px;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        .table-rounded {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-4">Tickets</h1>
+        <table id="tickets-table" class="table table-bordered table-rounded table-striped table-light">
+            <thead class="table-dark">
+                <tr>
+                    <th>Hardware</th>
+                    <th>IP Address</th>
+                    <th>Client Hostname</th>
+                    <th>Comments</th>
+                    <th>Phone</th>
+                    <th>Submission Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.hardware }}</td>
+                        <td>{{ ticket.ip_address }}</td>
+                        <td>{{ ticket.client_hostname.split()[0] }}</td>
+                        <td class="comments-column">{{ ticket.comments }}</td>
+                        <td>{{ ticket.phone }}</td>
+                        <td>{{ ticket.submission_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            <form method="post" action="/update_status">
+                                <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                                <select name="status" class="form-select" onchange="this.form.submit()">
+                                    <option value="open" {% if ticket.status == 'open' %}selected{% endif %}>Open</option>
+                                    <option value="closed" {% if ticket.status == 'closed' %}selected{% endif %}>Closed</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JavaScript and Popper.js (if needed) -->
+    <!-- Uncomment the following lines if using Bootstrap features that require JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        setTimeout(function () {
+            try {
+                location.reload();
+            } catch (error) {
+                console.error('Error reloading page:', error);
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
