@@ -11,9 +11,10 @@ WORKDIR /app
 COPY . /app
 
 # Generate a self-signed certificate and key
-RUN openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
-    -subj "/C=US/ST=NC/L=Local/O=Dev/CN=tickets.metaxa" \
-    -keyout /app/ssl.key -out /app/ssl.crt
+RUN openssl genrsa -out key.pem 2048
+RUN openssl req -new -key key.pem -out csr.pem
+RUN openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out cert.pem
+
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
