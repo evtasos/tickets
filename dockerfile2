@@ -1,0 +1,28 @@
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim-buster
+
+# Install DNS utilities and openssl
+RUN apt-get update && apt-get install -y dnsutils openssl
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Generate a self-signed certificate and key
+RUN openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
+    -subj "/C=US/ST=NC/L=Local/O=Dev/CN=tickets.metaxa" \
+    -keyout /app/ssl.key -out /app/ssl.crt
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Make port 443 available to the world outside this container
+EXPOSE 443
+
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
+CMD ["gunicorn", "--certfile=/app/ssl.crt", "--keyfile=/app/ssl.key", "-w", "4", "-b", "0.0.0.0:443", "app:app"]
