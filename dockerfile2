@@ -15,7 +15,6 @@ RUN openssl genrsa -out key.pem 2048
 RUN openssl req -new -key key.pem -out csr.pem
 RUN openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out cert.pem
 
-
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -26,4 +25,4 @@ EXPOSE 443
 ENV NAME World
 
 # Run app.py when the container launches
-CMD ["gunicorn", "--certfile=/app/ssl.crt", "--keyfile=/app/ssl.key", "-w", "4", "-b", "0.0.0.0:443", "app:app"]
+CMD ["gunicorn", "--certfile=/app/cert.pem", "--keyfile=/app/key.pem", "-w", "4", "-b", "0.0.0.0:443", "app:app"]
