@@ -15,9 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Generate a self-signed certificate
 RUN openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/C=GR/L=Local/O=Dev/CN=tickets.metaxa"
 
-# Make port 80 available to the world outside this container
-EXPOSE 5555
-
 # Make port 443 available to the world outside this container
 EXPOSE 5556
 
@@ -25,4 +22,4 @@ EXPOSE 5556
 ENV NAME World
 
 # Run app.py when the container launches
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5555", "-b", "0.0.0.0:5556", "--certfile=cert.pem", "--keyfile=key.pem", "app:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5556", "--certfile=cert.pem", "--keyfile=key.pem", "app:app"]
