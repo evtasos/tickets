@@ -3,8 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 import subprocess, platform
 from datetime import datetime
 from markupsafe import Markup
+from flask_sslify import SSLify
 
 app = Flask(__name__)
+sslify = SSLify(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tickets.db'  # Use SQLite as the database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking
 db = SQLAlchemy(app)
