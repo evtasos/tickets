@@ -41,14 +41,16 @@
         <!-- Display the message here -->
         
             <div class="col-md-6 mx-auto form-container">
-                <h2 class="text-center mb-4">Υποβολή Αιτήματος</h2>
+                <h2 class="text-center mb-4">Υποβολή Αιτήματος προς έλεγχο Hardware</h2>
                 
                 
 
                 <form id="ticket-form">
                     <div class="mb-3">
-                        <label for="hardware" class="form-label">Προς έλεγχο: </label>
-                        <select id="hardware" name="hardware" class="form-select">
+                        <!-- <label for="hardware" class="form-label">Προς έλεγχο: </label> -->
+                        <label for="hardware" class="form-label">Προς έλεγχο:</label>
+                        <!-- <select id="hardware" name="hardware" class="form-select"> -->
+                        <select id="hardware" name="hardware" class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" title="Επιλέξτε τον τύπο του υλικού προς έλεγχο">
                             <option value="Computer">Υπολογιστής</option>
                             <option value="Printer">Εκτυπωτής</option>
                             <option value="Othoni">Οθόνη</option>
@@ -57,22 +59,23 @@
                             <!-- Add more hardware options as needed -->
                         </select>
                     </div>
-
+                    
                     <div class="mb-3">
                         <label for="comments" class="form-label">Σχόλια: (προαιρετικό):</label>
-                        <textarea id="comments" name="comments" class="form-control" rows="3"></textarea>
+                        <!-- Add data-bs-toggle and data-bs-placement for the tooltip directly to the textarea -->
+                        <textarea id="comments" name="comments" class="form-control" rows="3" data-bs-toggle="tooltip" data-bs-placement="auto" title="Προσθέστε σχόλια σχετικά με την βλάβη του υλικού, το όνομα του υπολογιστή αν είναι διαφορετικός από αυτόν που γίνεται το αίτημα κλπ"></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="phone" class="form-label">Τηλ: (προαιρετικό)</label>
-                        <input type="text" id="phone" name="phone" class="form-control">
+                        <input type="text" id="phone" name="phone" class="form-control" data-bs-toggle="tooltip" data-bs-placement="auto" title="Προσθέστε τηλέφωνο σε περίπτωση που χρειαστεί να επικοινωνήσουμε μαζί σας">
                     </div>
                     
                     <div class="mb-3">
                         <input type="button" value="Υποβολή" class="btn btn-primary" onclick="confirmAction()">
                     </div>
                     <!-- Display the message here -->
-                    <div id="message-container"></div>
+                    <div id="message-container" data-bs-toggle="tooltip" data-bs-placement="auto" title="Μοναδικός αριθμός(ID), αποθηκεύστε τον για παρακολούθηση της πορείας του ελέγχου της συσκευής"></div>
                     
                 </form>
                 
@@ -92,7 +95,7 @@
     const comments = document.getElementById("comments").value;
     const phone = document.getElementById("phone").value;
 
-    if (confirm("Are you sure you want to perform this action?")) {
+    if (confirm("Είστε σίγουροι για την υποβολή?")) {
         const formData = {
             hardware: hardware,
             comments: comments,
@@ -134,6 +137,12 @@
         function clearForm() {
             document.getElementById("ticket-form").reset();
         }
+        // Initialize Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
     </script>
+    
 </body>
 </html>
